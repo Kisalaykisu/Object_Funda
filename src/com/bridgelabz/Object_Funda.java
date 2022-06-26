@@ -1,59 +1,61 @@
 package com.bridgelabz; // package
 
-import java.util.Arrays;  //import array
-import java.util.Random;  // import random
+import java.util.Scanner;  //Import Scanner
 
 public class Object_Funda {
-    String[] suit = {"Clubs", "Diamonds", "Hearts", "Spades"};
-    String[] rank = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
-    static String[] array1D = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
-    static String[][] array2D = new String[4][9];
-
-    public static void main(String[] args){ //Entry Point Of program
-        Object_Funda  obj = new Object_Funda(); //obj creation
-        obj.generateRandomCards();
+    //driver code
+    public static void main(String[] args) {  //Entry point of code
+        StockPortfolio portfolio = new StockPortfolio();  // New object creation
+        portfolio.PortfolioValue();
     }
+}
+
+/**
+ * Stock class will read the no.of shares
+ * and share price from the user for each Stock.
+ */
+class Stock {
+    int numberOfShares;
+    double sharePrice;
+    Scanner scanner = new Scanner(System.in);  // Make Scanner obj
 
     /**
-     * random card method is used to generate a random card from a deck of 52 cards
-     * @return random card method returns a card of String type
+     * @return stockValue of each stock is calculated based on share price and no.of shares
      */
-    public String randomCard() {
-        Random rand = new Random();
-        return suit[rand.nextInt(4)] + " " + rank[rand.nextInt(13)];
+    public double stockMethod() {
+        numberOfShares = scanner.nextInt(); //Input int
+        sharePrice = scanner.nextDouble();  // Input Double
+        return numberOfShares * sharePrice;
     }
+}
 
-    /**
-     * Method to display the cards received by the 4 players
-     */
-    public void showPlayerCards() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 9; j++) {
-                array2D[i][j] = array1D[(i + 1) * (j + 1) - 1];
-            }
-        }
-        int i = 1;
-        for (String[] row : array2D) {
-            System.out.println("Player " + i + ": " + Arrays.toString(row) + " \n");
-            i++;
-        }
-    }
+/**
+ * Stock portfolio class for determining the value of each stock
+ * and total portfolio value of all the stocks.
+ */
+class StockPortfolio {
+    static int N;
+    static double portfolioValue = 0;
 
-    /**
-     * Method to generate the required no.of cards and distribute them to the 4 players
-     */
-    public void generateRandomCards() {
-        Object_Funda  obj = new Object_Funda();
-        for (int i = 0; i < 36; i++) {
-            String x = obj.randomCard();
-            for (int j = 0; j <= i; j++) {
-                if (array1D[j].equals(x)) {
-                    x = obj.randomCard();
-                    j = 0;
-                }
-            }
-            array1D[i] = x;
+    public void PortfolioValue() {
+        Stock obj = new Stock();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter no.of stocks N: ");
+        N = scanner.nextInt();
+        double[] stocksValue = new double[N];
+        String[] stockNames = new String[N];
+        System.out.println("Enter all the stock names: ");
+        for (int i = 0; i < N; i++) {
+            stockNames[i] = scanner.next();
         }
-        obj.showPlayerCards();
+        for (int i = 0; i < N; i++) {
+            System.out.println("Enter " + stockNames[i] + " number of shares: and share price: ");
+            stocksValue[i] = obj.stockMethod();
+            portfolioValue += stocksValue[i];
+        }
+        for (int i = 0; i < N; i++) {
+            System.out.println(stockNames[i] + " current value is " + stocksValue[i]);
+        }
+        System.out.println("Total portfolio value is : " + portfolioValue);
     }
 }
